@@ -5,7 +5,7 @@ import time
 from datetime import datetime
     
 
-def train_model(train_loader,model,saving_path, criterions, optimizer,nbr_of_class = 3,epochs=25,checkpoint_epochs=50):
+def train_model(train_loader,model,device,saving_path, criterions, optimizer,nbr_of_class = 3,epochs=25,checkpoint_epochs=50):
     model_accuracy = []
     model_loss =[]
     n_class_correct = [0 for i in range(nbr_of_class)]
