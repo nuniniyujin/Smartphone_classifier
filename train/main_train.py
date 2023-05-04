@@ -1,11 +1,14 @@
 import argparse
-from train_utils import train_utils
+import torch # import forgot
+import torch.nn as nn # import forgot
+import torchvision # import forgot
+from train_utils import LambdaLR,transformation   # some missing import + wrong import
 from models import ConvNet, EfficientNet_b0, ResNet18
 from train_model import train_model
 
 parser = argparse.ArgumentParser(description = 'Train the classifier main file')
-parser.add_argument('--train_data_path', type=str, required=True, help='helo to train data folder')
-parser.add_argument('--test_data_path', type=str, required=True, help='helo to test data folder')
+parser.add_argument('--train_data_path', type=str, required=True, help='path to train data folder')
+parser.add_argument('--test_data_path', type=str, required=True, help='path to test data folder')
 
 #training arguments
 parser.add_argument('--epochs', type=int, default = 200, help='number of epochs for training')
@@ -22,7 +25,7 @@ parser.add_argument('--checkpoint_path', type=str, default=None,
 
 # Choose experiment
 parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0', 'ConvNet'],
-                    help='Choose between experiments ['ResNet18', 'EfficientNet', 'ConvNet']')
+                    help='Choose between experiments [ResNet18,EfficientNet,ConvNet]')
 
 args = parser.parse_args()
 
@@ -30,26 +33,31 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 if args.experiment == 'ResNet18':
-	model = ResNet18(nbr_of_class=number_of_class)
+	model = ResNet18(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path), strict=False)
+    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
 elif args.experiment == 'EfficientNet_b0':
-	model = EfficientNet_b0(nbr_of_class=number_of_class)
+	model = EfficientNet_b0(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path), strict=False)
-else:
-	model = ConvNet(nbr_of_class=number_of_class)
+    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
+elif args.experiment == 'ConvNet': #added condition
+	model = ConvNet(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path), strict=False)
+    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
 
+print("---model loaded---")
 model = model.to(device)
 
-train_loader = torch.utils.data.DataLoader(args.train_data_path, batch_size = args.batch_size, shuffle=True)
-test_loader = torch.utils.data.DataLoader(args.test_data_path, batch_size=args.batch_size, shuffle=True)
+train_dataset = torchvision.datasets.ImageFolder(root=args.train_data_path,transform=transformation) # making dataset was totally missing
+test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transform=transformation) # making dataset was totally missing
 
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True) #wrong argument
+print("train dataset made")
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) #wrong argument and removed shuffle
+print("test dataset made")
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
-lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(num_epochs=args.epochs, decay_epoch=args.decay_epoch).step)
+lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) #lambdaLR arguments were wrong 
 
-
-model_myresnet,model_accuracy,model_loss = train_model(train_loader, model,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, epochs=num_epochs,checkpoint_epochs=50)
+print("train will be launched") 
+model_myresnet,model_accuracy,model_loss = train_model(train_loader, model,device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
