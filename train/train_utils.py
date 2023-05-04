@@ -18,9 +18,9 @@ class LambdaLR:
       
 transformation = transforms.Compose(
     [transforms.ToTensor(),
-     transforms.RandomHorizontalFlip(p=0.5),
-     transforms.RandomVerticalFlip(p=0.5),
-     transforms.RandomApply([transforms.RandomRotation((90, 90))], p=0.5),
+     transforms.RandomHorizontalFlip(p=0.9),
+     transforms.RandomVerticalFlip(p=0.9),
+     transforms.RandomApply([transforms.RandomRotation((90, 90))], p=0.9),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 def imshow(img,title):
