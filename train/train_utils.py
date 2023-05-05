@@ -17,6 +17,9 @@ class LambdaLR:
     def step(self, epoch):
         return 1.0 - max(0, epoch - self.decay_start_epoch) / (self.n_epochs - self.decay_start_epoch)
 
+transform = transforms.Compose([transforms.ToTensor()])
+    
+transform2 = A.Compose([ToTensorV2()])
       
 transformation = transforms.Compose(
     [transforms.ToTensor(),
