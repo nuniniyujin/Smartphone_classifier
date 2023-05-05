@@ -4,6 +4,8 @@ import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 import os.path
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -21,6 +23,8 @@ transformation = transforms.Compose(
      transforms.RandomHorizontalFlip(p=0.9),
      transforms.RandomVerticalFlip(p=0.9),
      transforms.RandomApply([transforms.RandomRotation((90, 90))], p=0.9),
+     #A.ImageCompression(quality_lower=10, quality_upper=100),
+     #A.Downscale(scale_min = 0.5, scale_max = 4),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 def imshow(img,title):
