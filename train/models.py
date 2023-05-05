@@ -96,7 +96,25 @@ class EfficientNet_b0(nn.Module):
         x = self.model._dropout(x)
         x = self.classifier_layer(x)
         return x
-
+      
+class EfficientNet_b5(nn.Module):
+    def __init__(self,nbr_of_class):
+        super(EfficientNet_b5, self).__init__()
+        self.model = EfficientNet.from_pretrained('efficientnet-b5')     
+        self.classifier_layer = nn.Sequential(
+                    nn.Linear(2048 , 512),
+                    nn.BatchNorm1d(512),
+                    nn.Dropout(0.2),
+                    nn.Linear(512 , 256),
+                    nn.Linear(256 , nbr_of_class))
+        
+    def forward(self, inputs):
+        x = self.model.extract_features(inputs)
+        x = self.model._avg_pooling(x)
+        x = x.flatten(start_dim=1)
+        x = self.model._dropout(x)
+        x = self.classifier_layer(x)
+        return x
       
 class ResNet18(nn.Module): 
       def __init__(self,nbr_of_class):
