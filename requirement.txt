@@ -1,1 +1,2 @@
 pip install albumentations
+pip install pretrainedmodels
