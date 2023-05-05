@@ -26,13 +26,14 @@ transformation = transforms.Compose(
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 transformation2 = A.Compose([
+    ToTensorV2(),
     A.RandomCrop(width=224, height=224),
     A.augmentations.geometric.rotate.RandomRotate90(always_apply=False, p=1.0),
     A.augmentations.geometric.transforms.HorizontalFlip(0.5),
     A.augmentations.geometric.transforms.VerticalFlip(0.5),
     A.augmentations.transforms.ImageCompression(quality_lower=10, quality_upper=90, p=0.9),
     A.augmentations.transforms.Downscale(scale_limit=(0.25,4), p=0.9),
-    A.Normalize(mean=0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),ToTensorV2()
+    A.Normalize(mean=0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
 ])
 
 def imshow(img,title):
