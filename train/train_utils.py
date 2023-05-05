@@ -32,7 +32,7 @@ transformation2 = A.Compose([
     A.augmentations.geometric.transforms.VerticalFlip(0.5),
     A.augmentations.transforms.ImageCompression(quality_lower=10, quality_upper=90, p=0.9),
     A.augmentations.transforms.Downscale(scale_limit=(0.25,4), p=0.9),
-    A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),ToTensorV2()
+    A.Normalize(mean=0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),ToTensorV2()
 ])
 
 def imshow(img,title):
