@@ -1,6 +1,8 @@
 import numpy as np
 import torchvision
 from torchvision import datasets,transforms
+from torchvision.datasets.folder import DatasetFolder, default_loader, IMG_EXTENSIONS
+from typing import Any, Callable, Optional, Tuple
 
 class ForchheimData(DatasetFolder):
     def __init__(
