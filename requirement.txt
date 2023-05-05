@@ -1,2 +1,3 @@
 pip install albumentations
 pip install pretrainedmodels
+pip install efficientnet-pytorch
