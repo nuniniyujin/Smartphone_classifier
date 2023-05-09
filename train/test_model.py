@@ -1,6 +1,6 @@
 import torch
 
-def test_model(test_loader,model,nbr_of_class, device):
+def test_model(test_loader,model,nbr_of_class,device):
   with torch.no_grad():
     #initialisation of all the metric
       n_correct = 0
@@ -32,4 +32,4 @@ def test_model(test_loader,model,nbr_of_class, device):
 
       for i in range(nbr_of_class):
           acc = 100.0 * n_class_correct[i] / n_class_samples[i]
-          print(f'Accuracy of {classes[i]}: {acc} %')
+          print(f'Accuracy of label{i}: {acc} %')
