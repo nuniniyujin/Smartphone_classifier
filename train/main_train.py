@@ -59,6 +59,7 @@ valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=args.batch_
 print("valid dataset made") 
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) 
 print("test dataset made")
+
 criterion = nn.CrossEntropyLoss()
 
 if args.optimizer == 'SGD':
@@ -69,6 +70,4 @@ if args.optimizer == 'Adam':
 lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) 
 
 print("train will be launched") 
-model_myresnet,model_accuracy,model_loss = train_model(train_loader, model,device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
-
-
+model_myresnet,model_accuracy,model_loss = train_model(train_loader,valid_loader,model,device = device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer,nbr_of_class = args.number_of_class, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
