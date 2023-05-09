@@ -99,7 +99,12 @@ def generate_dataset_for_forchheim(folder_path, output_path, tiles_M = 224, tile
             s = np.array(heuristic_scores)
             sort_index = np.argsort(s)
 
-            for k in range((nbr_of_tiles-1),(nbr_of_tiles-nbr_patch_per_image-1),-1):
+            max = nbr_of_tiles-1
+            if ((nbr_of_tiles-nbr_patch_per_image-1)<0):
+                min = 0
+            else: min = (nbr_of_tiles-nbr_patch_per_image-1)
+
+            for k in range(max,min,-1):
                 if image_index < Strain: 
                     cv2.imwrite(output_path+f"/Train/{j}/"+str(filename_extract)+"_"+ str(sort_index[k])+'.png', tiles_index[sort_index[k],:,:,:])
                 if image_index >= Strain  and image_index < Strain+Stest: 
