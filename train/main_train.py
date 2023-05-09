@@ -55,6 +55,8 @@ test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transfo
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True) 
 print("train dataset made")
+valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False)
+print("valid dataset made") 
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) 
 print("test dataset made")
 criterion = nn.CrossEntropyLoss()
