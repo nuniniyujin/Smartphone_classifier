@@ -4,10 +4,11 @@ import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 import os.path
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
 import matplotlib.pyplot as plt
 import numpy as np
+import random
+from PIL import Image
+from io import BytesIO
 
 class LambdaLR:
     def __init__(self, n_epochs, decay_start_epoch):
@@ -17,27 +18,56 @@ class LambdaLR:
     def step(self, epoch):
         return 1.0 - max(0, epoch - self.decay_start_epoch) / (self.n_epochs - self.decay_start_epoch)
 
-transform = transforms.Compose([transforms.ToTensor()])
-    
-transform2 = A.Compose([ToTensorV2()])
-      
-transformation = transforms.Compose(
+def randomJPEGcompression(image):
+    pb = random.random() 
+    if pb <= 0.9:
+        qf = random.randrange(10, 100,10) #start,stop,step
+        outputIoStream = BytesIO()
+        image.save(outputIoStream, "JPEG", quality=qf, optimice=True)
+        outputIoStream.seek(0)
+        return Image.open(outputIoStream)
+    else : 
+        return image
+
+def randomRescale(image):
+    pb = random.random()
+    #print("pb", pb)
+    if pb <= 0.9:
+        rescale_step = random.randrange(50)
+        min = 0.25
+        max = 4
+        rescale_ratio = ((max - min)/50) * rescale_step+1 + min
+        transform = transforms.Resize((int(224*rescale_ratio),int(224*rescale_ratio)))
+        transform2 = transforms.Resize((224,224))
+        return transform2(transform(image))
+    else: 
+        return image
+
+
+def randomRotation(image):
+    angle = random.randrange(-180,180,90) #start,stop,step
+    return transforms.functional.rotate(image,angle)
+
+transformation_test = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+          
+transformation_train = transforms.Compose(
     [transforms.ToTensor(),
      transforms.RandomHorizontalFlip(p=0.9),
      transforms.RandomVerticalFlip(p=0.9),
-     transforms.RandomApply([transforms.RandomRotation((90, 90))], p=0.9),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-transformation2 = A.Compose([
-    ToTensorV2(),
-    A.RandomCrop(width=456, height=456),
-    A.augmentations.geometric.rotate.RandomRotate90(always_apply=False, p=1.0),
-    A.augmentations.transforms.HorizontalFlip(p=0.5),
-    A.augmentations.transforms.VerticalFlip(0.5),
-    A.augmentations.transforms.ImageCompression(quality_lower=10, quality_upper=90, p=0.9),
-    A.augmentations.transforms.Downscale(scale_min =0.25, scale_max=0.99),
-    A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
-])
+transformation_Forchheim_train = transforms.Compose(
+    [
+     transforms.RandomHorizontalFlip(p=0.9),
+     transforms.RandomVerticalFlip(p=0.9),
+     transforms.Lambda(randomRotation),
+     transforms.Lambda(randomRescale),
+     transforms.Lambda(randomJPEGcompression),
+     transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+     ])
 
 def imshow(img,title):
     img = img / 2 + 0.5  # unnormalize
@@ -45,3 +75,4 @@ def imshow(img,title):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.title(title)
     plt.show()
+
