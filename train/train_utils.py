@@ -75,4 +75,3 @@ def imshow(img,title):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.title(title)
     plt.show()
-
