@@ -1,8 +1,8 @@
 import argparse
-import torch # import forgot
-import torch.nn as nn # import forgot
-import torchvision # import forgot
-from train_utils import LambdaLR,transformation   # some missing import + wrong import
+import torch 
+import torch.nn as nn 
+import torchvision 
+from train_utils import transformation_Forchheim_train, transformation_test, LambdaLR
 from models import ConvNet, EfficientNet_b0, ResNet18
 from train_model import train_model
 
@@ -26,6 +26,7 @@ parser.add_argument('--checkpoint_path', type=str, default=None,
 # Choose experiment
 parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0', 'ConvNet'],
                     help='Choose between experiments [ResNet18,EfficientNet,ConvNet]')
+parser.add_argument('--optimizer', type=str, default='Adam', choices = ['SGD', 'Adam'], help = 'chosse optimizer')
 
 args = parser.parse_args()
 
@@ -48,16 +49,22 @@ elif args.experiment == 'ConvNet': #added condition
 print("---model loaded---")
 model = model.to(device)
 
-train_dataset = torchvision.datasets.ImageFolder(root=args.train_data_path,transform=transformation) # making dataset was totally missing
-test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transform=transformation) # making dataset was totally missing
+train_dataset = torchvision.datasets.ImageFolder(root=args.train_data_path,transform=transformation_Forchheim_train) # making dataset was totally missing
+test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transform=transformation_test) # making dataset was totally missing
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True) #wrong argument
 print("train dataset made")
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) #wrong argument and removed shuffle
 print("test dataset made")
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+
+if args.optimizer == 'SGD':
+	optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+if args.optimizer == 'Adam':
+	optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+
 lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) #lambdaLR arguments were wrong 
 
 print("train will be launched") 
 model_myresnet,model_accuracy,model_loss = train_model(train_loader, model,device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
+
