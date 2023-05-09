@@ -1,6 +1,6 @@
 import torch
 
-def test_model(test_loader,model,nbr_of_class):
+def test_model(test_loader,model,nbr_of_class, device):
   with torch.no_grad():
     #initialisation of all the metric
       n_correct = 0
