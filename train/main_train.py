@@ -8,6 +8,7 @@ from train_model import train_model
 
 parser = argparse.ArgumentParser(description = 'Train the classifier main file')
 parser.add_argument('--train_data_path', type=str, required=True, help='path to train data folder')
+parser.add_argument('--valid_data_path', type=str, required=True, help='help to valid data folder')
 parser.add_argument('--test_data_path', type=str, required=True, help='path to test data folder')
 
 #training arguments
@@ -21,7 +22,6 @@ parser.add_argument('--number_of_class', type=int, default=3, help='number of cl
 # Continue training from checkpoint
 parser.add_argument('--checkpoint_path', type=str, default=None,
                     help='Path to the model checkpoint to continue training')
-
 
 # Choose experiment
 parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0', 'ConvNet'],
@@ -49,12 +49,13 @@ elif args.experiment == 'ConvNet': #added condition
 print("---model loaded---")
 model = model.to(device)
 
-train_dataset = torchvision.datasets.ImageFolder(root=args.train_data_path,transform=transformation_Forchheim_train) # making dataset was totally missing
-test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transform=transformation_test) # making dataset was totally missing
+train_dataset = torchvision.datasets.ImageFolder(root=args.train_data_path,transform=transformation_Forchheim_train)
+valid_dataset =  torchvision.datasets.ImageFolder(root=args.valid_data_path,transform=transformation_test)
+test_dataset = torchvision.datasets.ImageFolder(root=args.test_data_path,transform=transformation_test) 
 
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True) #wrong argument
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True) 
 print("train dataset made")
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) #wrong argument and removed shuffle
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) 
 print("test dataset made")
 criterion = nn.CrossEntropyLoss()
 
@@ -63,8 +64,9 @@ if args.optimizer == 'SGD':
 if args.optimizer == 'Adam':
 	optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
-lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) #lambdaLR arguments were wrong 
+lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) 
 
 print("train will be launched") 
 model_myresnet,model_accuracy,model_loss = train_model(train_loader, model,device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
+
 
