@@ -1,10 +1,16 @@
 import torch
 import os.path
 import time
+from test_model import test_model
 from datetime import datetime
     
 
-def train_model(train_loader,model,device,saving_path, criterions, optimizer,nbr_of_class = 3,epochs=25,checkpoint_epochs=50):
+def train_model(train_loader,valid_loader, model,device,saving_path, criterions, optimizer,nbr_of_class = 3,epochs=25,checkpoint_epochs=50,valid_epochs=5):
+    
+    if not (os.path.exists(saving_path)):
+        print("creating folder for output dataset")
+        os.mkdir(saving_path)
+
     model_accuracy = []
     model_loss =[]
     n_class_correct = [0 for i in range(nbr_of_class)]
@@ -59,6 +65,9 @@ def train_model(train_loader,model,device,saving_path, criterions, optimizer,nbr
           
       print(f'--- Epoch [{epoch+1}/{epochs}], Epoch avg Loss: {loss_average_epoch:.4f}, accuracy:{acc:.4f} ---')
 
+      if (epoch%valid_epochs==0):
+        test_model(valid_loader,model,nbr_of_class,device)
+    
     print('Finished Training')
     now = datetime.now()
     dt_string = now.strftime("%d_%m_%Y_%Hh%M")
