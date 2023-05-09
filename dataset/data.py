@@ -1,44 +1,22 @@
 import numpy as np
-import torchvision
-from torchvision import datasets,transforms
-from torchvision.datasets.folder import DatasetFolder, default_loader, IMG_EXTENSIONS
-from typing import Any, Callable, Optional, Tuple
 
-class ForchheimData(DatasetFolder):
-    def __init__(
-        self,
-        root: str,
-        transform: Optional[Callable] = None,
-        target_transform: Optional[Callable] = None,
-        loader: Callable[[str], Any] = default_loader,
-        is_valid_file: Optional[Callable[[str], bool]] = None,
-    ):
-        super().__init__(
-            root,
-            loader,
-            IMG_EXTENSIONS if is_valid_file is None else None,
-            transform=transform,
-            target_transform=target_transform,
-            is_valid_file=is_valid_file,
-        )
-        self.imgs = self.samples
+def heuristic_quality_criterion(patch_image):
+    alpha = 0.7
+    beta = 4.0
+    gamma = np.log(0.01)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
-        """
-        Args:
-            index (int): Index
+    # Calculate the mean and standard deviation in each color channel
+    red_mean = np.mean(patch_image[:, :, 0])
+    green_mean = np.mean(patch_image[:, :, 1])
+    blue_mean = np.mean(patch_image[:, :, 2])
 
-        Returns:
-            tuple: (sample, target) where target is class_index of the target class.
-        """
-        path, target = self.samples[index]
-        sample = np.array(self.loader(path))
-        if self.transform is not None:
-            sample = transform(image=sample)['image']
-        if self.target_transform is not None:
-            target = self.target_transform(target)
+    red_std = np.std(patch_image[:, :, 0])
+    green_std = np.std(patch_image[:, :, 1])
+    blue_std = np.std(patch_image[:, :, 2])
 
-        return sample, target
+    quality = alpha*beta*(red_mean-red_mean**2)+(1-alpha)*(1-np.exp(gamma*red_std))
+    quality += alpha*beta*(green_mean-green_mean**2)+(1-alpha)*(1-np.exp(gamma*green_mean))
+    quality += alpha*beta*(blue_mean-blue_mean**2)+(1-alpha)*(1-np.exp(gamma*blue_mean))
+    quality = quality/3
 
-    def __len__(self) -> int:
-        return len(self.samples)
+    return quality
