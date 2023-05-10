@@ -71,3 +71,4 @@ lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=Lamb
 
 print("train will be launched") 
 model_myresnet,model_accuracy,model_loss = train_model(train_loader,valid_loader,model,device = device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer,nbr_of_class = args.number_of_class, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
+test_model(test_loader,model,nbr_of_class = args.number_of_class, device=device)
