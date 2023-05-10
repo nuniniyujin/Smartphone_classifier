@@ -1,4 +1,4 @@
-from dataset.data_utils import heuristic_quality_criterion
+from data_utils import heuristic_quality_criterion
 import glob
 import cv2
 import numpy as np
