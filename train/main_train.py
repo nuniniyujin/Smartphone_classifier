@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn 
 import torchvision 
 from train_utils import transformation_Forchheim_train, transformation_test, LambdaLR
-from models import ConvNet, EfficientNet_b0, ResNet18
+from models import ConvNet,EfficientNet_b0_vanila, EfficientNet_b0, ResNet18
 from train_model import train_model
 from test_model import test_model
 
@@ -25,8 +25,8 @@ parser.add_argument('--checkpoint_path', type=str, default=None,
                     help='Path to the model checkpoint to continue training')
 
 # Choose experiment
-parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0', 'ConvNet'],
-                    help='Choose between experiments [ResNet18,EfficientNet,ConvNet]')
+parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0_vanila', 'EfficientNet_b0', 'ConvNet'],
+                    help='Choose between experiments [ResNet18,EfficientNet_b0_vanila, EfficientNet_authors ,ConvNet]')
 parser.add_argument('--optimizer', type=str, default='Adam', choices = ['SGD', 'Adam'], help = 'chosse optimizer')
 
 args = parser.parse_args()
@@ -38,6 +38,10 @@ if args.experiment == 'ResNet18':
 	model = ResNet18(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
     		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
+elif args.experiment == 'EfficientNet_b0_vanila':
+	model = EfficientNet_b0(nbr_of_class=args.number_of_class) # added args.
+	if args.checkpoint_path is not None:
+    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu		
 elif args.experiment == 'EfficientNet_b0':
 	model = EfficientNet_b0(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
