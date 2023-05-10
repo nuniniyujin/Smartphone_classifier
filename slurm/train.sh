@@ -8,8 +8,8 @@
 #SBATCH --cpus-per-task=3
 #SBATCH --qos=qos_gpu-t3
 #SBATCH --time=19:00:00
-#SBATCH --output=/gpfswork/rech/gbr/uru89tg/smartphone-classifier/logs/out/train_%j.txt
-#SBATCH --error=/gpfswork/rech/gbr/uru89tg/smartphone-classifier/logs/err/train_%j.txt
+#SBATCH --output=/gpfswork/rech/gbr/uru89tg/Smartphone_classifier/logs/out/train_%j.txt
+#SBATCH --error=/gpfswork/rech/gbr/uru89tg/Smartphone_classifier/logs/err/train_%j.txt
 #SBATCH --mail-user=thomas.eboli@ens-paris-saclay.fr
 # #SBATCH --partition=gpu_p2
 
@@ -19,7 +19,7 @@ module purge
 # load module
 module load pytorch-gpu/py3/1.13.0
 
-cd /gpfswork/rech/gbr/uru89tg/smartphone-classifier/train
+cd /gpfswork/rech/gbr/uru89tg/Smartphone_classifier/train
 
 nvidia-smi
 free -m
