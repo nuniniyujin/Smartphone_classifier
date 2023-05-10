@@ -5,6 +5,7 @@ import torchvision
 from train_utils import transformation_Forchheim_train, transformation_test, LambdaLR
 from models import ConvNet, EfficientNet_b0, ResNet18
 from train_model import train_model
+from test_model import test_model
 
 parser = argparse.ArgumentParser(description = 'Train the classifier main file')
 parser.add_argument('--train_data_path', type=str, required=True, help='path to train data folder')
