@@ -27,5 +27,5 @@ nvidia-smi
 free -m
 
 
-srun python main_train.py --train_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Train" --valid_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Valid" --test_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Test" --saving_path "/gpfswork/rech/gbr/uru89tg/smartphone-classifier/checkpoint" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
+srun python main_train.py --train_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Train" --valid_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Valid" --test_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Test" --model_output_path "/gpfswork/rech/gbr/uru89tg/smartphone-classifier/checkpoint" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
 
