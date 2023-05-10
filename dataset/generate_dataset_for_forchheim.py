@@ -11,7 +11,7 @@ def generate_dataset_for_forchheim(folder_path, output_path, tiles_M = 224, tile
     for path in os.listdir(folder_path): 
         if path[-1] == "1":
             phone_path_list.append(os.path.join(folder_path,path))
-
+    phone_path_list.sort()
     print(phone_path_list)
 
     Strain = 97
