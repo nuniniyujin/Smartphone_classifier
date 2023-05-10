@@ -18,7 +18,7 @@ module purge
 # load module
 module load pytorch-gpu/py3/1.13.0
 
-cd /gpfswork/rech/gbr/uru89tg//smartphone-classifier
+cd /gpfswork/rech/gbr/uru89tg/smartphone-classifier
 nvidia-smi
 free -m
 
