@@ -15,7 +15,7 @@ parser.add_argument('--test_data_path', type=str, required=True, help='path to t
 parser.add_argument('--epochs', type=int, default = 200, help='number of epochs for training')
 parser.add_argument('--decay_epoch', type=int, default=100, help='number of decay epoch for training')
 parser.add_argument('--batch_size', type=int, default=8, help ='batch size for training')
-parser.add_argument('--lr', type=float, default=0.005)
+parser.add_argument('--lr', type=float, default=0.001)
 parser.add_argument('--model_output_path', type=str, default='./weight_saved/',help='Directory to save model weights')
 parser.add_argument('--number_of_class', type=int, default=3, help='number of class')
 
