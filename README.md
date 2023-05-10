@@ -25,5 +25,5 @@ generate_dataset_for_forchheim(folder_path=dataset_path, output_path=output_path
 ### Run traininig script
 
 ```Python
-!python main_train.py --train_data_path "/path/Training/Dataset" --valid_data_path "/path/Valid/Dataset" --test_data_path "/path/Test/Dataset " --model_output_path "/path/to/save/checkpoint" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
+!python main_train.py --train_data_path "/path/preprocessed/Training/Dataset" --valid_data_path "/path/preprocessed/Valid/Dataset" --test_data_path "/path/preprocessed/Test/Dataset " --model_output_path "/path/to/save/checkpoint" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
 ```
