@@ -1,5 +1,8 @@
 #!/bin/bash
 #SBATCH --nodes=1
+#SBATCH --job-name=forchheim_classifier
+#SBATCH --account=jou@v100
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:1
 #SBATCH --hint=nomultithread
@@ -25,5 +28,5 @@ free -m
 export TRAIN_NAME=$2
 export TRAIN_MODULE=$1
 
-srun python main_train.py --train_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed\Train" --valid_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed\Valid" --test_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed\Test" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
+srun python main_train.py --train_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Train" --valid_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Valid" --test_data_path "/gpfsscratch/rech/jou/uru89tg/forchheim_preprocessed/Test" --epochs 300 --number_of_class 25 --experiment "EfficientNet_b0" --optimizer "Adam"
 
