@@ -16,7 +16,6 @@
 Generating dataset for preprocessing : 
 
 ```Python
-!python main.py --experiment [baseline, conv_change or wgan] --data_path #Path/of/your/dataset
 from dataset.generate_dataset_for_forchheim import generate_dataset_for_forchheim
 dataset_path = r"path/of/dataset"
 output_path = r"/path/of/preprocessed_dataset"
