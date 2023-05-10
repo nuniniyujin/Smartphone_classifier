@@ -3,6 +3,7 @@
 ## The Forchheim Image Database for Camera Identification in the Wild, 2020
 * [Paper link](https://arxiv.org/pdf/2011.02241.pdf)
 * unofficial pytorch implementation
+* The paper demonstrates the usefulness of FODB(Forchheim Image Databse) for camera identification tasks
 
 
 ###Dataset 
