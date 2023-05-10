@@ -78,7 +78,7 @@ class ConvNet(nn.Module):
         return x
     
     
-class EfficientNet_b0(nn.Module):
+class EfficientNet_b0_vanila(nn.Module):
     def __init__(self,nbr_of_class):
         super(EfficientNet_b0, self).__init__()
         self.model = EfficientNet.from_pretrained('efficientnet-b0')     
@@ -94,6 +94,30 @@ class EfficientNet_b0(nn.Module):
         x = self.model._avg_pooling(x)
         x = x.flatten(start_dim=1)
         x = self.model._dropout(x)
+        x = self.classifier_layer(x)
+        return x
+      
+      
+class EfficientNet_b0(nn.Module):
+    def __init__(self, nbr_of_class):
+        super(EfficientNet_b0, self).__init__()
+        self.model = EfficientNet.from_pretrained('efficientnet-b0')
+
+        # Remove final classification layer
+        self.model._fc = nn.Identity()
+
+        self.global_avg_pooling = nn.AdaptiveAvgPool2d(1)
+        self.classifier_layer = nn.Sequential(
+            nn.Linear(self.model._conv_head.out_channels, nbr_of_class),
+            nn.Softmax(dim=1)
+        )
+        # Initialize the weights of the new classification layer with Glorot uniform initialization
+        nn.init.xavier_uniform_(self.classifier_layer[0].weight)
+
+    def forward(self, inputs):
+        x = self.model.extract_features(inputs)
+        x = self.global_avg_pooling(x)
+        x = x.view(x.size(0), -1)
         x = self.classifier_layer(x)
         return x
       
