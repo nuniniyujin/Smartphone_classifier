@@ -1,5 +1,5 @@
 pretrainedmodels
 efficientnet-pytorch
 opencv-python
-tqdm
+
 
