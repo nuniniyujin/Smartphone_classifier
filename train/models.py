@@ -99,10 +99,11 @@ class EfficientNet_b0_vanila(nn.Module):
       
       
 class EfficientNet_b0(nn.Module):
-    def __init__(self, nbr_of_class):
+    def __init__(self, nbr_of_class,device):
         super(EfficientNet_b0, self).__init__()
-        self.model = EfficientNet.from_pretrained('efficientnet-b0')
-
+        #self.model = EfficientNet.from_pretrained('efficientnet-b0')
+        self.model = EfficientNet.from_name('efficientnet-b0')
+        self.model.load_state_dict(torch.load("/linkhome/rech/genwnn01/uru89tg/.cache/torch/hub/checkpoints/efficientnet-b0-355c32eb.pth",map_location=device), strict=False)
         # Remove final classification layer
         self.model._fc = nn.Identity()
 
