@@ -11,7 +11,7 @@
 #SBATCH --output=/gpfswork/rech/gbr/uru89tg/Smartphone_classifier/logs/out/train_%j.txt
 #SBATCH --error=/gpfswork/rech/gbr/uru89tg/Smartphone_classifier/logs/err/train_%j.txt
 #SBATCH --mail-user=thomas.eboli@ens-paris-saclay.fr
-# #SBATCH --partition=gpu_p2
+#SBATCH --partition=gpu_p2
 
 # Clean modules
 module purge
