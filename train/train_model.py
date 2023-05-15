@@ -18,6 +18,10 @@ def train_model(train_loader,valid_loader, model,device,saving_path, criterions,
 
     n_total_steps = len(train_loader)
     print(n_total_steps)
+    
+    if start_epoch != 0:
+        epochs = start_epoch + epochs
+        
     for epoch in range(start_epoch, epochs):
       n_correct=0
       n_samples=0
