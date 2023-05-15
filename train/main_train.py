@@ -23,6 +23,7 @@ parser.add_argument('--number_of_class', type=int, default=3, help='number of cl
 # Continue training from checkpoint
 parser.add_argument('--checkpoint_path', type=str, default=None,
                     help='Path to the model checkpoint to continue training')
+parser.add_argument('--start_epoch', type = int, default = 0, help='start training from certain epoch')
 
 # Choose experiment
 parser.add_argument('--experiment', type=str, default='ResNet18', choices=['ResNet18', 'EfficientNet_b0_vanila', 'EfficientNet_b0', 'ConvNet'],
@@ -33,6 +34,15 @@ args = parser.parse_args()
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+if args.checkpoint_path is not None:
+	filename = os.path.basename(args.checkpoint_path)
+	x = filename.split("_")
+	epoch_info = x[1]
+	epoch_info = text_num_split(epoch_info)
+	args.start_epoch = int(epoch_info[1])
+else:
+	args.start_epoch = 0
+	
 
 if args.experiment == 'ResNet18':
 	model = ResNet18(nbr_of_class=args.number_of_class) # added args.
@@ -75,5 +85,5 @@ if args.optimizer == 'Adam':
 lr_scheduler_optim = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(n_epochs=args.epochs, decay_start_epoch=args.decay_epoch).step) 
 
 print("train will be launched") 
-model_myresnet,model_accuracy,model_loss = train_model(train_loader,valid_loader,model,device = device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer,nbr_of_class = args.number_of_class, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
+model_myresnet,model_accuracy,model_loss = train_model(train_loader,valid_loader,model,device = device,saving_path=args.model_output_path,criterions=criterion, optimizer=optimizer, start_epoch = args.start_epoch, nbr_of_class = args.number_of_class, epochs=args.epochs,checkpoint_epochs=50) #added device argument to function
 test_model(test_loader,model,nbr_of_class = args.number_of_class, device=device)
