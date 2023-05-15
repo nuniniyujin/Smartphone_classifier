@@ -5,7 +5,7 @@ from test_model import test_model
 from datetime import datetime
     
 
-def train_model(train_loader,valid_loader, model,device,saving_path, criterions, optimizer,nbr_of_class = 3,epochs=25,checkpoint_epochs=50,valid_epochs=5):
+def train_model(train_loader,valid_loader, model,device,saving_path, criterions, optimizer, start_epoch = 0, nbr_of_class = 3,epochs=25,checkpoint_epochs=50,valid_epochs=5):
     
     if not (os.path.exists(saving_path)):
         print("creating folder for output dataset")
@@ -18,7 +18,7 @@ def train_model(train_loader,valid_loader, model,device,saving_path, criterions,
 
     n_total_steps = len(train_loader)
     print(n_total_steps)
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
       n_correct=0
       n_samples=0
       acc=0
