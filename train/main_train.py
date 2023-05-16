@@ -47,19 +47,19 @@ else:
 if args.experiment == 'ResNet18':
 	model = ResNet18(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
+    		model.load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
 elif args.experiment == 'EfficientNet_b0_vanila':
 	model = EfficientNet_b0(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu		
+    		model.load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu		
 elif args.experiment == 'EfficientNet_b0':
 	model = EfficientNet_b0(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
+    		model.load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
 elif args.experiment == 'ConvNet': #added condition
 	model = ConvNet(nbr_of_class=args.number_of_class) # added args.
 	if args.checkpoint_path is not None:
-    		model .load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
+    		model.load_state_dict(torch.load(args.checkpoint_path,map_location=device), strict=False) # added map location to make work on cpu
 
 print("---model loaded---")
 model = model.to(device)
